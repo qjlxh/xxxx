@@ -1,0 +1,8 @@
+rules:
+    - GEOIP,CN,DIRECT,no-resolve
+    - GEOIP,private,DIRECT,no-resolve  
+    - GEOSITE,apple-cn,DIRECT  
+    - GEOSITE,cn,DIRECT
+    - GEOSITE,microsoft@cn,DIRECT 
+    - GEOSITE,private,DIRECT 
+    - MATCH,DIRECT
