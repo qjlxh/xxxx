@@ -28,7 +28,7 @@ external-ui: "/usr/share/openclash/ui"
 sniffer:
   enable: true
   parse-pure-ip: true
-dns: &dns {fake-ip-filter: ["*.lan", "*.local", "*.localhost", "*.localdomain", "*.home.arpa", "*.example", "*.invalid", "*.test", "localhost.ptlogin2.qq.com", "localhost.sec.qq.com"]}
+dns: &dns {fake-ip-filter: ["*.lan", "*.local", "*.localhost", "*.localdomain", "*.home.arpa", "*.example", "*.invalid", "*.test", "localhost.ptlogin2.qq.com", "localhost.sec.qq.com", "*.qq.com", "*.tencent.com"]}
 geox-url:
   geoip: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
   geosite: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
