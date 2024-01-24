@@ -1,0 +1,167 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
+allow-lan: true
+mode: Rule
+log-level: info
+external-controller: :9090
+secret: '821513'
+bind-address: "*"
+ipv6: true
+geodata-mode: true
+geo-auto-update: false
+geo-update-interval: 24
+tcp-concurrent: true
+tun:
+  enable: true
+  stack: system
+  device: utun
+  auto-route: false
+  auto-detect-interface: false
+  dns-hijack:
+  - tcp://any:53
+profile:
+  store-selected: true
+external-ui: "/usr/share/openclash/ui"
+sniffer:
+  enable: true
+  parse-pure-ip: true
+dns: &dns {fake-ip-filter: ["*.lan", "*.local", "*.localhost", "*.localdomain", "*.home.arpa", "*.example", "*.invalid", "*.test", "localhost.ptlogin2.qq.com", "localhost.sec.qq.com"]}
+geox-url:
+  geoip: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+p: &p {type: http, interval: 86400, health-check: {enable: true, url: https://www.gstatic.com/generate_204, interval: 180}}
+use: &use {use: [No1,No2,No3,No4,No5,No6,No7,No8,No9]}
+proxy-providers:
+  No1:
+    <<: *p
+    url: "https://moes.lnaspiring.com/Moe233-Subs/wel/api/v1/client/subscribe?token=95fead777ea516d1b88f37e03ec82461"
+  No2:
+    <<: *p
+    url: "https://api.yijianlian.app/api/v1/client/subscribe?token=ac34c86f9734f47a8eb91beb5e560928"
+  No3:
+    <<: *p
+    url: "https://hela.ink/api/v1/client/subscribe?token=1430e8rb5d4f433f13fe7f7562424654"
+  No4:
+    <<: *p
+    url: ""
+  No5:
+    <<: *p
+    url: ""
+  No6:
+    <<: *p
+    url: ""
+  No7:
+    <<: *p
+    url: "https://raw.githubusercontent.com/qjlxh/x/x/xx"
+  No8:
+    <<: *p
+    url: "https://raw.githubusercontent.com/qjlxh/x/x/xh"
+  No9:
+    <<: *p
+    url: "https://raw.githubusercontent.com/qjlxh/x/x/443"
+p0: &p0 {type: select,  <<: *use, filter: "(?i)🇦🇫|🇦🇶|🇦🇷|🇦🇹|🇦🇺|🇧🇩|🇧🇲|🇧🇷|🇧🇹|🇧🇾|🇨🇦|🇨🇫|🇨🇭|🇨🇱|🇨🇳|🇨🇴|🇨🇺|🇨🇽|🇩🇪|🇩🇰|🇪🇬|🇪🇸|🇪🇹|🇪🇺|🇫🇮|🇫🇷|🇬🇧|🇬🇮|🇬🇱|🇬🇳|🇬🇷|🇭🇰|🇭🇺|🇮🇩|🇮🇪|🇮🇳|🇮🇶|🇮🇷|🇮🇸|🇯🇲|🇯🇵|🇰🇭|🇰🇵|🇰🇷|🇰🇼|🇱🇦|🇱🇹|🇲🇲|🇲🇳|🇲🇴|🇲🇺|🇲🇻|🇲🇽|🇲🇾|🇳🇱|🇳🇴|🇳🇵|🇳🇿|🇵🇦|🇵🇪|🇵🇭|🇵🇰|🇵🇱|🇵🇸|🇵🇹|🇷🇺|🇸🇦|🇺🇳|🇸🇪|🇸🇬|🇸🇴|🇸🇾|🇹🇭|🇹🇯|🇹🇷|🇹🇼|🇺🇦|🇺🇬|🇺🇸|🇻🇦|🇻🇪|🇻🇳|🇼🇸|🇿🇦|🇿🇼"}
+p1: &p1 {type: select, proxies: [自动选择, 负载均衡, 字节跳动, 中国, 节能, 莱垠, DIRECT],  <<: *p0}
+p2: &p2 {type: url-test,  <<: *use, exclude-filter: "(?i)莱垠|•|付费|到期|剩余|套餐|官网|欢迎|注册|群"}
+p3: &p3 {type: load-balance,  <<: *use, exclude-filter: "(?i)莱垠|付费|到期|剩余|套餐|官网|欢迎|注册|群"}
+p4: &p4 {type: url-test,  <<: *use, exclude-filter: "(?i)莱垠|•|🇭🇰|香港|hk|🇹🇼|台湾|tw|付费|到期|剩余|套餐|官网|欢迎|注册|群"}
+p5: &p5 {type: url-test,  <<: *use, filter: "(?i)CN"}
+p6: &p6 {type: url-test,  <<: *use, filter: "(?i)•"}
+p7: &p7 {type: select,   <<: *use, filter: "(?i)莱垠"}
+p8: &p8 {type: select, proxies: [DIRECT, 节点选择, 负载均衡, 中国, 节能]}
+p9: &p9 {type: select, proxies: [节点选择, DIRECT, 负载均衡, 中国, 节能]}
+proxy-groups:
+  - {name: 节点选择,  <<: *p1}
+  - {name: 自动选择,  <<: *p2}
+  - {name: 负载均衡,  <<: *p3}
+  - {name: 字节跳动,  <<: *p4}
+  - {name: 中国,  <<: *p5}
+  - {name: 节能,  <<: *p6}
+  - {name: 莱垠,  <<: *p7}
+  - {name: 全球直连,  <<: *p8}
+  - {name: 节点代理,  <<: *p9}
+rules:
+    - GEOSITE,tiktok,字节跳动
+    - GEOSITE,youtube,节点选择
+    - GEOSITE,twitter,节点选择
+    - GEOSITE,telegram,节点选择
+    - GEOSITE,google,节点选择
+    - GEOSITE,github,节点选择
+    - GEOSITE,geolocation-!cn,节点选择
+    - GEOSITE,facebook,节点选择
+    - GEOIP,telegram,节点选择
+    - GEOIP,US,节点选择
+    - GEOSITE,private,DIRECT
+    - GEOSITE,microsoft@cn,DIRECT
+    - GEOSITE,cn,DIRECT
+    - GEOSITE,apple-cn,DIRECT
+    - GEOIP,CN,DIRECT,no-resolve
+    - GEOIP,private,DIRECT,no-resolve
+    - MATCH,DIRECT
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: text}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: text}
+rule-providers:
+  private:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.list"
+  cn_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.list"
+  biliintl_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.list"
+  ehentai_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ehentai.list"
+  github_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.list"
+  twitter_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.list"
+  youtube_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.list"
+  google_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.list"
+  telegram_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.list"
+  netflix_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.list"
+  bilibili_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.list"
+  bahamut_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bahamut.list"
+  spotify_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.list"
+  pixiv_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pixiv.list"
+  geolocation-!cn:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.list"
+  cn_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list"
+  google_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.list"
+  netflix_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.list"
+  twitter_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.list"
+  telegram_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.list"
